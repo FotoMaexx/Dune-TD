@@ -1,0 +1,503 @@
+\documentclass{uulm-assignment}
+
+\usepackage{import}
+\usepackage{tabularx}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{CJKutf8}
+\usepackage{graphicx}
+\usepackage{verbatim} % wieder löschen später
+
+\setboolean{showsolutions}{false}
+
+\ifthenelse{\boolean{showsolutions}}{
+\newcommand\mitloesung{1}%
+}{
+\newcommand\mitloesung{0}%
+}
+
+
+% Für Korrektur-Kommentare in roten Boxen:
+\newcommand{\flo}[1]{
+    \fcolorbox{purple}{pink}{\sffamily\scriptsize\bfseries\textcolor{black}{Flo:}} {\sffamily\bfseries\textcolor{purple}{#1}}
+}
+
+
+
+\hypersetup{colorlinks=false,urlcolor=uulm-in}
+
+\faculty{Institut für Softwaretechnik und Programmiersprachen\hspace{0.05cm}}
+\course{Softwaregrundprojekt}
+\semester{\hspace{0.05cm}WiSe 2021/22}
+\supervisor{\textbf{} \hspace{7.9cm} Prof. Dr. Thomas Thüm, Florian Ege, Dennis Jehle}
+
+\assignmenttype{}
+\assignmentno{}
+\title{Pflichtenheft}
+
+\begin{document}
+
+\maketitle
+
+\section{Einleitung}
+
+Der Zweck dieses Dokuments ist es, eine detaillierte Beschreibung der Anforderungen, sowie der
+Benutzerschnittstelle für die Anwendung \textbf{Dune TD} bereitzustellen. Es wird abgegrenzt, welche
+Anforderungen erfüllt werden müssen, damit die entwickelte Anwendung vom Kunden akzeptiert
+wird.
+
+\subsection{Anwendungsbereich}
+
+Das Spiel \textbf{Dune TD} ist eine Java-Anwendung, die es dem Benutzer ermöglicht, ein 3D-Spiel zu spielen.
+
+\subsection{Definitionen und Abkürzungen}
+
+Diese Tabelle enthält Abkürzungen und domänenspezifische Begriffe, die im Dokument verwendet
+werden.
+
+\begin{tabularx}{16cm}{l|X}
+\textbf{Begriff} & \textbf{Definition} \\
+\hline
+Benutzer & In diesem Dokument wird immer dann von einem Benutzer gesprochen, wenn eine Person gemeint ist, die mit der Anwendung interagiert. Eine Person, die mit der Anwendung interagiert, ist solange ein Benutzer, bis diese sich innerhalb einer Spielpartie befindet, dann wird von einem Spieler gesprochen.\\
+\hline
+Spieler & Ein Spieler ist eine Person (männlich, weiblich, divers), welche sich innerhalb einer Spielpartie befindet und somit aktiv das Spiel Dune TD spielt. \\
+\hline
+Spielpartie & Unter einer Spielpartie versteht man die aktive Ausführung des Regelwerks des Spiels 'Dune TD', bis der Spieler eine Siegbedingung erreicht oder das Spiel beendet wird. \\
+\hline
+Client & Unter einem Client versteht man, im Kontext dieses Dokuments, eine Java Anwendung, welche das Spiel 'Dune TD' darstellt und dem Benutzer (Spieler) die Interaktion mit der Anwendung ermöglicht, sowie Nachrichten mit einem Server austauschen kann. \\
+\hline
+Server & Unter einem Server versteht man, im Kontext dieses Dokuments, eine Anwendung, die auf einem, über das Netzwerk erreichbaren, System installiert ist und Nachrichten mit mehreren Clients austauschen kann. \\
+\end{tabularx}
+
+\textbf{\textit{Hinweis: Dieser Abschnitt des Pflichtenhefts ist von hoher Relevanz. Das definieren von verwendeten Begriffen mag vielleicht zunächst überflüssig erscheinen, da Ihnen als Entwickler die Bedeutung der Begrifflichkeiten bekannt ist, allerdings ist das Pflichtenheft hauptsächlich ein Dokument für den Kunden. Pflegen Sie diesen Abschnitt des Pflichtenhefts daher mit großer Sorgfalt, denn es könnte durchaus vorkommen, dass sich Ihr Tutor / Ihre Tutorin in einen technisch nicht versierten Kunden verwandelt und den Rotstift schwingt.}}
+
+\subsection{Überblick}
+
+Der Rest dieses Dokuments enthält zwei Kapitel. Das zweite Kapitel gibt einen Überblick über die
+Systemfunktionalität und behandelt die Systemeinschränkungen und Annahmen über das Produkt.
+Das dritte Kapitel stellt die detaillierte Anforderungsspezifikation bereit.
+
+\section{Allgemeine Beschreibung}
+
+Dune TD ist ein rundenbasiertes Einzelspielerspiel aus dem Genre der Tower Defense Spiele (\href{https://de.wikipedia.org/wiki/Tower_Defense}{Link zu Wikipedia}). Es nimmt genau ein Spieler an einer Spielpartie teil. Ziel des Spiels ist es, alle Wellen von Feindeinheiten zu besiegen.
+
+\subsection{Ansichten}
+
+Die Anwendung besteht aus mehreren Ansichten, sogenannten \textit{Views}, über welche der Benutzer mit dem Programm interagieren kann.
+
+\begin{tabularx}{16cm}{l|X}
+\textbf{View} & \textbf{Beschreibung} \\
+\hline
+Hauptmenü & Nach dem Start der Anwendung befindet sich der Benutzer im Hauptmenü. Von hier aus kann der Benutzer auf verschiedene andere Ansichten navigieren. \\
+\hline
+Spielbildschirm & Auf dieser View wird das eigentliche Spiel dargestellt. \\
+\end{tabularx}
+
+\subsection{Systemeinschränkungen und Abhängigkeiten}
+
+Die Anwendung wird durch die Prozessor- und/oder Grafikleistung des Systems begrenzt, auf dem es
+läuft. Um die Anwendung auszuführen, wird das \textbf{Java Runtime Environment} (JRE) benötigt.
+
+\section{Spezifische Anforderungen}
+
+Dieser Abschnitt enthält alle spezifischen Anforderungen an das System. Er bietet eine detaillierte
+Beschreibung des Systems und seiner Funktionen.
+
+\subsection{Funktionale Anforderungen}
+
+Dieser Abschnitt enthält alle Anforderungen, die die grundlegenden Aktionen des Softwaresystems
+spezifizieren.
+
+\begin{tabularx}{16cm}{l|X}
+\textbf{ID} & \textbf{FA1} \\
+\hline
+TITEL: & Hauptmenü \\
+\hline
+BESCHREIBUNG: & Nach dem Anwendungsstart wird dem Benutzer das Hauptmenü angezeigt. Der Benutzer kann folgende Aktionen im Hauptmenü ausführen: 
+\begin{itemize}
+\item Auf den Spielbildschirm wechseln
+\item Die Anwendung beenden
+\end{itemize}
+\\
+\hline
+BEGRÜNDUNG: & Nachdem der Benutzer die Anwendung gestartet hat, soll nicht direkt der Spielbildschirm erscheinen.
+Der Benutzer soll die Möglichkeit haben das Spiel zu starten sobald es vom Benutzer gewünscht ist.\\
+\hline
+ABHÄNGIGKEITEN: & FA2\\
+\end{tabularx}
+
+\begin{tabularx}{16cm}{l|X}
+\textbf{ID} & \textbf{FA2} \\
+\hline
+TITEL: & Spielbildschirm \\
+\hline
+BESCHREIBUNG: & Die Spieler bekommen auf dem Spielbildschirm den aktuellen Spielzustand angezeigt.
+\\
+\hline
+BEGRÜNDUNG: & Es muss einen Bildschirm geben, auf welchem der Spielzustand angezeigt wird, da das Spiel
+sonst nicht spielbar ist. \\
+\hline
+ABHÄNGIGKEITEN: & FA1, FA3\\
+\end{tabularx}
+
+\begin{tabularx}{16cm}{l|X}
+\textbf{ID} & \textbf{FA3} \\
+\hline
+TITEL: & Spielfeld anzeigen \\
+\hline
+BESCHREIBUNG: & Das Spielfeld der Dune TD ist schachbrettartig, und hat eine Mindestgröße von 2 auf 2 Kacheln.
+\\
+\hline
+BEGRÜNDUNG: & Es muss ein für die Spieler sichtbares Spielfeld geben, da ansonsten keine Türme
+platziert werden können. \\
+\hline
+ABHÄNGIGKEITEN: & FA2\\
+\end{tabularx}
+
+\begin{tabularx}{16cm}{l|X}
+	\textbf{ID} & \textbf{FA14} \\
+	\hline
+	TITEL: & Turmreichweite \\
+	\hline
+	BESCHREIBUNG: & Jeder Turm verfügt über einen effektiven Wirkbereich, dieser ist im Fall von \mbox{Geschütz-,} Bomben- und Schalltürmen kreisförmig.
+	Im Fall des Shai-Hulud (Sandwurm) die komplette entsprechende Zeile oder Spalte des Spielfelds.\\
+	\hline
+	BEGRÜNDUNG: & Sonst könnte jeder Turm jede Feindeinheit von überall aus angreifen. \\
+	\hline
+	ABHÄNGIGKEITEN: & \\
+\end{tabularx}
+
+\begin{tabularx}{16cm}{l|X}
+	\textbf{ID} & \textbf{FA15} \\
+	\hline
+	TITEL: & Turmreichweite: Geschütz- und Bombenturm \\
+	\hline
+	BESCHREIBUNG: & Der Geschütz- und Bombenturm attackieren Feindeinheiten aktiv, indem sie Projektile oder Bomben auf diese abfeuern.
+	Doch nicht alle Feindeinheiten können angegriffen werden, nur solche welche sich innerhalb der Turmreichweite befinden.
+	Um zu berechnen, ob sich eine Feindeinheit in Reichweite befindet wird die euklidische Norm verwendet (Turmposition, Position Feindeinheit).\\
+	\hline
+	BEGRÜNDUNG: & Sonst könnten Geschütz- und Bombentürme nicht entscheiden ob eine Feindeinheit beschossen werden kann oder nicht.\\
+	\hline
+	ABHÄNGIGKEITEN: & F14\\
+\end{tabularx}
+
+\begin{tabularx}{16cm}{l|X}
+	\textbf{ID} & \textbf{FA16} \\
+	\hline
+	TITEL: & Turmreichweite: Schallturm \\
+	\hline
+	BESCHREIBUNG: & Der Schallturm als sogenannter Effekt-Turm greift Feindeinheiten nicht aktiv an, sondern verändert die Bodenbeschaffenheit in seinem Wirkbereich.
+	Dennoch wird auch hier mittels der euklidischen Norm (Turmposition, Position Feindeinheit) ermittelt, ob Feindeinheiten vom Effekt des Schallturms betroffen sind oder nicht.\\
+	\hline
+	BEGRÜNDUNG: & Sonst könnten Feindeinheiten mit normaler Geschwindigkeit über Treibsand laufen.\\
+	\hline
+	ABHÄNGIGKEITEN: & F14\\
+\end{tabularx}
+
+\begin{tabularx}{16cm}{l|X}
+\textbf{ID} & \textbf{FA36} \\
+\hline
+TITEL: & Score anzeigen \\
+\hline
+BESCHREIBUNG: & Der Score berechnet sich aus verschieden Faktoren. Durch das Zerstören von Feinden bekommt der Spieler Punkte, durch den Abriss von Türmen verliert er Punkte. Endet das Spiel durch einen Sieg oder durch eine Niederlage, ergeben sich die Finalen Punkte, welche mit den Multiplikatoren der Anzahl und Schwierigkeit der Wellen berechent werden.
+\\
+\hline
+BEGRÜNDUNG: & So kann der Spieler seine aktuellen Punktestand einsehen.\\
+\hline
+ABHÄNGIGKEITEN: & FA2, FA53, FA54, FA56 \\
+\end{tabularx}
+
+\begin{tabularx}{16cm}{l|X}
+\textbf{ID} & \textbf{FA37} \\
+\hline
+TITEL: & Highscore übermitteln \\
+\hline
+BESCHREIBUNG: & Nach dem Ende einer Spielpartie soll die erreichte Punktezahl an einen WebSocket Server übertragen werden.
+\textbf{\textit{Hinweis: Die Nachrichten welche an den WebSocket Server gesendet werden müssen, um
+die Punktezahl zu übermitteln werden im sogenannten Netzwerkstandarddokument spezifiziert, dieses Dokument
+werden Sie rechtzeitig von uns erhalten. Für das Gruppenprojekt werden Sie selbst ein 
+Netzwerkstandarddokument, zusammen mit anderen Studierenden, verfassen, dazu zu gegebener Zeit mehr.}}
+\\
+\hline
+BEGRÜNDUNG: & So wird dokumentiert, welcher Spieler wann gegen wen gewonnen hat. \\
+\hline
+ABHÄNGIGKEITEN: & FA36, FA55, FA56 \\
+\end{tabularx}
+
+\begin{tabularx}{16cm}{l|X}
+\textbf{ID} & \textbf{FA38} \\
+\hline
+TITEL: & Lebenspunkte anzeigen \\
+\hline
+BESCHREIBUNG: & Der Spieler verfügt über eine bestimmte Anzahl von Lebenspunkte. Diese werden reduziert, sobald eine Feindeinheit das Ausgangsportal des Spielfelds erreicht hat.
+\\
+\hline
+BEGRÜNDUNG: & Es muss eine für den Spieler sichtbare Lebenspunkteanzeige geben, da der Spieler sonst nicht weiß, wie viele Feindeinheiten das Ausgangsportal noch erreichen könnten, bevor er das Spiel verloren hat \\
+\hline
+ABHÄNGIGKEITEN: &FA39, FA2 \\
+\end{tabularx}
+
+\begin{tabularx}{16cm}{l|X}
+\textbf{ID} & \textbf{FA39} \\
+\hline
+TITEL: & Portale \\
+\hline
+BESCHREIBUNG: & Die Portale sind Kacheln auf dem Spielfeld an denen die Feindeinheiten das Spielfeld entweder betreten oder verlassen können. Zwischen diesen muss jedoch mindestens eine Kachel liegen. 
+\\
+\hline
+BEGRÜNDUNG: & Ohne die Portale können die Feindeinheiten das Spielfeld nicht betreten oder verlassen. Somit könnte das Spiel nicht beendet werden. \\
+\hline
+ABHÄNGIGKEITEN: & FA2\\
+\end{tabularx}
+
+\begin{tabularx}{16cm}{l|X}
+\textbf{ID} & \textbf{FA40} \\
+\hline
+TITEL: & Eingangsportal \\
+\hline
+BESCHREIBUNG: & Das Eingangsportal ist das Feld in dem die Gegner das Spielfeld beteten können. Nur dort können neue Gegner erscheinen. Zwischen dem Eingangs- und Ausgangsportal muss mindestens eine Kachel liegen.
+\\
+\hline
+BEGRÜNDUNG: &  Sonst hätten die Gegner keinen Punkt an dem sie das Spielfeld betreten könnten\\
+\hline
+ABHÄNGIGKEITEN: &FA39 \\
+\end{tabularx}
+
+\begin{tabularx}{16cm}{l|X}
+\textbf{ID} & \textbf{FA41} \\
+\hline
+TITEL: & Ausgangsportal \\
+\hline
+BESCHREIBUNG: & Das Ausgangsportal ist das Feld in dem die Gegner das Spielfeld wieder verlassen können. Sollten sie dieses erreichen, wird dem Spieler ein Lebenspunkt abgezogen. Zwischen dem Eingangs- und Ausgangsportal muss mindestens eine Kachel liegen.
+\\
+\hline
+BEGRÜNDUNG: & So wird dokumentiert, welcher Spieler wann gegen wen gewonnen hat. \\
+\hline
+ABHÄNGIGKEITEN: & FA39\\ 
+\end{tabularx}
+
+\begin{tabularx}{16cm}{l|X}
+\textbf{ID} & \textbf{FA42} \\
+\hline
+TITEL: & Teilnehmeranzahl \\ 
+\hline
+BESCHREIBUNG: & Dune TD darf nur von einem Spieler auf einem Client gleichzeitig gespielt werden. 
+\\
+\hline
+BEGRÜNDUNG: & Da das Spiel als Einzelspieler-Spiel programmiert werden soll, darf maximal ein Spieler gleichzeitig auf das Spielfeld Zugriff haben. \\
+\hline
+ABHÄNGIGKEITEN: & \\
+\end{tabularx}
+
+\begin{tabularx}{16cm}{l|X}
+\textbf{ID} & \textbf{FA43} \\
+\hline
+TITEL: & Platzierung von Türmen\\
+\hline
+BESCHREIBUNG: & Ein Turm wandelt eine Kachel von einem Laufweg zu einer Verteidigungseinheit um. Pro Kachel darf nur ein Turm platziert werden. Türme können nicht auf Portalen platziert werden. Dort kann sich dann keine Feindeinheit mehr befinden. Die Platzierung von Türmen kostet den Spieler Spice. Türme können nur vor der ersten und zwischen zwei Wellen platziert werden.
+\\ 
+\hline
+BEGRÜNDUNG: & Ohne die Türme würde keine Möglichkeit bestehen die Feindeinheiten effektiv auf ihrem Weg zum Ausgangsportal aufzuhalten. \\ 
+\hline
+ABHÄNGIGKEITEN: & FA45, FA52\\
+\end{tabularx}
+
+\begin{tabularx}{16cm}{l|X}
+\textbf{ID} & \textbf{FA44} \\
+\hline
+TITEL: & Anordnung von Türmen \\
+\hline
+BESCHREIBUNG: & Türme können nur auf einer Kachel gebaut werden. Sie dürfen jedoch nicht so platziert werden, dass die Türme den Weg der Feindeinheiten zum Ausgangsportal blockieren.
+\\
+\hline
+BEGRÜNDUNG: & So wird gewährleistet, dass die Feindeinheiten eine Möglichkeit haben das Ausgangsportal zu erreichen. \\
+\hline
+ABHÄNGIGKEITEN: & FA43 \\ 
+\end{tabularx}
+
+\begin{tabularx}{16cm}{l|X}
+\textbf{ID} & \textbf{FA45} \\
+\hline
+TITEL: & Spice anzeigen \\ 
+\hline
+BESCHREIBUNG: & Um Türme bauen zu können benötigt der Spieler Spice. Dieses kann er verdienen, indem er Feindeinheiten zerstört. Je nach Stärke der Feindeinheit bekommt er einen unterschiedlichen Betrag an Spice gutgeschrieben.
+\\
+\hline
+BEGRÜNDUNG: & Da Türme nicht kostenlos gebaut werden können, muss der Spieler sehen, wie viel Spice ihm zur Verfügung steht. \\
+\hline
+ABHÄNGIGKEITEN: & FA2, FA47\\ 
+\end{tabularx}
+
+\begin{tabularx}{16cm}{l|X}
+\textbf{ID} & \textbf{FA46} \\
+\hline
+TITEL: & Shai-Hulud \\
+\hline
+BESCHREIBUNG: & Der Shai-Hulud ist eine Verteidigungseinheit, welcher nach zwei Klopfern auf unterschiedlichen freien Kacheln in einer Reihe angelockt wird. Dieser "frisst" dann alles, was sich in dieser Reihe befindet, inklusive eigene Türme, exklusive Portale und Kacheln. Er kann in unregelmäßigen Abständen herbeigerufen werden, jedoch darf er maximal einmal pro Welle herbeigerufen werden.
+\\
+\hline
+BEGRÜNDUNG: & Durch diese Einheit, können Feindeinheiten effektiv entfernt werden, ohne jeodch eine zu großen Vorteil zu bekommen, da eigene Türme damit auch zerstört werden. \\
+\hline
+ABHÄNGIGKEITEN: & FA52\\
+\end{tabularx}
+
+\begin{tabularx}{16cm}{l|X}
+\textbf{ID} & \textbf{FA47} \\
+\hline
+TITEL: &Feindeinheiten \\
+\hline
+BESCHREIBUNG: & Die Feindeinheiten bestehen aus Infanterie, Erntemaschinen und Bosseinheiten, welche versuchen vom Startportal zum Endportal zu kommen, ohne dabei von den Türmen oder dem Shai-Hulud zerstört zu werden. Auf ihrem Weg werden sie von den Verteidigungseinheiten angegriffen, was sich durch eine Verringerung ihrer Lebenspunkte oder einem anderen Effekt auf sie auswirkt. 
+\\
+\hline
+BEGRÜNDUNG: & Durch die Feindeinheiten bekommen die Verteidigungseinheiten (Türme, Shai-Hulud) eine Verwendung.\\
+\hline
+ABHÄNGIGKEITEN: & \\
+\end{tabularx}
+
+\begin{tabularx}{16cm}{l|X}
+\textbf{ID} & \textbf{FA48} \\
+\hline
+TITEL: & Feindeinheiten: Infanterie \\
+\hline
+BESCHREIBUNG: & Die Infanterie ist die schnellste Feindeinheit. Diese ist jedoch auch die am wenigsten widerstandsfähigste. Die effektivste Verteidigungseinheit gegen sie ist der Geschützturm.
+\\
+\hline
+BEGRÜNDUNG: & Durch diese Einheit, muss der Spieler schnell und taktisch handeln, da diese schwer durch bspw. einen Bombenturm aufgehalten werden können. \\
+\hline
+ABHÄNGIGKEITEN: & FA47\\ 
+\end{tabularx}
+
+\begin{tabularx}{16cm}{l|X}
+\textbf{ID} & \textbf{FA49} \\
+\hline
+TITEL: & Feindeinheiten: Erntemaschinen \\
+\hline
+BESCHREIBUNG: & Die Erntemaschinen sind die langsamsten Einheiten. Diese haben dafür sehr hohe Lebenspunkte. Die effektivste Verteidigungseinheit gegen sie ist der Bombenturm.
+\\
+\hline
+BEGRÜNDUNG: & Durch diese Einheit, muss der Spieler seien Türme schlau platzieren, da diese schwer durch bspw. einen Geschützturm oder einen Schallturm aufgehalten werden können. \\ 
+\hline
+ABHÄNGIGKEITEN: & FA47\\ 
+\end{tabularx}
+
+\begin{tabularx}{16cm}{l|X}
+\textbf{ID} & \textbf{FA50} \\
+\hline
+TITEL: & Feindeinheiten: Bosseinheiten  \\
+\hline
+BESCHREIBUNG: & Die Bosseinheit hat am meisten Lebenspunkte von allen Einheiten. Sie ist deutlich schneller als die Erntemaschine, jedoch nicht so schnell wie die Infanterie-Einheiten.
+\\
+\hline
+BEGRÜNDUNG: & Durch diese Einheit wird das Spiel für den Spieler schweiriger gestaltet, da die Bosseinheit eine Mischung aus den beiden anderen Einheiten ist. \\ 
+\hline
+ABHÄNGIGKEITEN: & FA47\\
+\end{tabularx}
+
+\begin{tabularx}{16cm}{l|X}
+\textbf{ID} & \textbf{FA51} \\
+\hline
+TITEL: & Feindeinheiten: Pathfinding \\ 
+\hline
+BESCHREIBUNG: & Die Feindeinheiten können sich nach links, rechts, oben und unten bewegen, jedoch nicht Diagonal. Die Feindeinheiten suchen sich immer den kürzesten Weg zum Endportal, was aber nicht bedeutet, dass dies der am wenigsten schädlichste ist. Es muss immer midenstens ein Laufweg gewährleistet sein. Um zu berechnen, welches der kürzeste Weg ist wird der  Dijkstra-Algorithmus verwendet. Sollten mehrere kürzeste Laufwege zur Verfügung stehen, wird ein Laufweg in determinischtischer Art und Weise gewählt.
+\\ 
+\hline
+BEGRÜNDUNG: & Somit kann der Spieler evtl. vorhersehen, wie er seine Türme platzieren muss um das Spiel zu gewinnen und in einem großen Spielfeld können sich die Feindeinheiten nicht wirklich "verlaufen". \\ 
+\hline
+ABHÄNGIGKEITEN: & FA43, FA47\\ 
+\end{tabularx}
+
+\begin{tabularx}{16cm}{l|X}
+\textbf{ID} & \textbf{FA52} \\
+\hline
+TITEL: & Wellen \\
+\hline
+BESCHREIBUNG: & Dass nicht alle Feindeinheiten auf einmal das Spielfeld betreten und der Spieler auch Zeit hat, um neune Verteidigungseinheiten zu platzieren, werden die Feindeinheiten in Wellen versuchen das Endportal zu erreichen. 
+\\ 
+\hline
+BEGRÜNDUNG: & Durch die Wellen wird der Spielablauf strukturierter und der Spieler kann seine verdinenten Spice zwischen den Wellen einsetzen. \\
+\hline
+ABHÄNGIGKEITEN: & \\
+\end{tabularx}
+
+\begin{tabularx}{16cm}{l|X}
+\textbf{ID} & \textbf{FA53} \\
+\hline
+TITEL: & Wellen: Anzahl \\ 
+\hline
+BESCHREIBUNG: & Das die Spiele nicht alle ewig gehen, kann der Spieler die Anzahl der Wellen vor dem Spiel definieren. Hierbei kann er entscheiden, ob er viele Wellen haben will, oder mit wenigen Wellen spielen will.
+\\
+\hline
+BEGRÜNDUNG: & So kann der Spieler festlegen, wie lange sein Spiel gehen soll. \\
+\hline
+ABHÄNGIGKEITEN: &FA52 \\ 
+\end{tabularx}
+
+\begin{tabularx}{16cm}{l|X}
+\textbf{ID} & \textbf{FA54} \\
+\hline
+TITEL: & Wellen: Schwierigkeit \\ 
+\hline
+BESCHREIBUNG: & Da nicht jeder Spieler gleich gut ist, kann er die Schwierigkeit der Wellen vor dem Spiel definieren. Somit wird die Anzahl der Feindeinheiten, sowie die Anzahl der verschiedenen Arten der Feindeinheiten in Bezug auf die Anzahl der Wellen (Wellen in aufsteigender Schwierigkeit) angepasst.
+\\
+\hline
+BEGRÜNDUNG: & So kann der Spieler festlegen, wie schwer sein Spiel werden soll.\\
+\hline
+ABHÄNGIGKEITEN: & FA52, FA53\\ 
+\end{tabularx}
+
+\begin{tabularx}{16cm}{l|X}
+\textbf{ID} & \textbf{FA55} \\
+\hline
+TITEL: & Sieg \\
+\hline
+BESCHREIBUNG: & Sollte der Spieler alle Feindeinheiten in allen Wellen besiegt haben, ohne dass seine Lebenspunkte auf 0 sinken, hat der Spieler das Spiel gewonnen.
+\\
+\hline
+BEGRÜNDUNG: & So wird erkannt, dass der Spieler alle Wellen abgeschlossen hat. \\
+\hline
+ABHÄNGIGKEITEN: & FA52\\
+\end{tabularx}
+
+\begin{tabularx}{16cm}{l|X}
+\textbf{ID} & \textbf{FA56} \\
+\hline
+TITEL: & Niederlage \\
+\hline
+BESCHREIBUNG: & Wenn der Spieler alle Lebenspunkte durch Feineinheiten, welche das Ausgangsportal erreicht haben, verloren hat, hat der Spieler das Spiel verloren.
+\\
+\hline
+BEGRÜNDUNG: & So wird erkannt, dass die Lebenspunktanzalh auf 0 gesunken ist. \\
+\hline
+ABHÄNGIGKEITEN: & FA38\\
+\end{tabularx}
+
+\subsection{Nichtfunktionale Anforderungen}
+
+Dieser Abschnitt spezifiziert die Qualitätsanforderungen (QA) an das Softwaresystem.
+
+\begin{tabularx}{16cm}{l|X}
+\textbf{ID} & \textbf{QA1} \\
+\hline
+TITEL: & Robustheit \\
+\hline
+BESCHREIBUNG: & Die Anwendung darf nicht abstürzen. Bei 100 Spielen darf maximal 1 Spiel
+aufgrund eines Fehlers abgebrochen werden. \\ 
+\end{tabularx}
+
+\begin{tabularx}{16cm}{l|X}
+\textbf{ID} & \textbf{QA2} \\
+\hline
+TITEL: &  Kompabilität\\ 
+\hline
+BESCHREIBUNG: & Die Anwendung muss auf Windows 10 und Linux laufähig sein. \\ 
+\end{tabularx}
+
+\begin{tabularx}{16cm}{l|X}
+\textbf{ID} & \textbf{QA3} \\
+\hline
+TITEL: & Anwendungssprache \\ 
+\hline
+BESCHREIBUNG: & Die Anwendung muss in den Sprachen deutsch oder englisch ausführbar sein.  \\ 
+\end{tabularx}
+
+\end{document}
